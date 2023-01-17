@@ -1,0 +1,8 @@
+@import "./base/root.css";
+@import "./base/html.css";
+@import "./base/_custom.css";
+@import "./base/media.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

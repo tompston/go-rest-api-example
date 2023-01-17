@@ -1,0 +1,235 @@
+{
+  "project_info": {
+    "go_version": 1.19,
+    "name": "backend",
+    "framework": "chi",
+    "port": 4444,
+    "api_prefix": "/api/v1",
+    "config_version": 0.1,
+    "db_type": "postgres",
+    "include_sql": false,
+    "include_fetch": true,
+    "gomarvin_version": "v0.6.x"
+  },
+  "modules": [
+    {
+      "name": "User",
+      "endpoints": [
+        {
+          "url": "/user",
+          "method": "GET",
+          "response_type": "with_pagination",
+          "controller_name": "GetUsers",
+          "url_params": [],
+          "body": []
+        },
+        {
+          "url": "/user/id",
+          "method": "GET",
+          "response_type": "default",
+          "controller_name": "GetUserByID",
+          "url_params": [
+            {
+              "field": "id",
+              "type": "string"
+            }
+          ],
+          "body": []
+        },
+        {
+          "url": "/user/register",
+          "method": "POST",
+          "response_type": "default",
+          "controller_name": "RegisterUser",
+          "url_params": [],
+          "body": [
+            {
+              "validate": "required,min=5,max=250",
+              "field": "username",
+              "type": "string"
+            },
+            {
+              "validate": "required,min=10,max=250",
+              "field": "password",
+              "type": "string"
+            },
+            {
+              "validate": "required,email",
+              "field": "email",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "url": "/user",
+          "method": "DELETE",
+          "response_type": "default",
+          "controller_name": "DeleteUser",
+          "url_params": [],
+          "body": []
+        },
+        {
+          "url": "/user/username",
+          "method": "GET",
+          "response_type": "default",
+          "controller_name": "GetUserByUsername",
+          "url_params": [
+            {
+              "field": "username",
+              "type": "string"
+            }
+          ],
+          "body": []
+        },
+        {
+          "url": "/user/login",
+          "method": "POST",
+          "response_type": "default",
+          "controller_name": "LoginUser",
+          "url_params": [],
+          "body": [
+            {
+              "validate": "required,min=5,max=250",
+              "field": "username",
+              "type": "string"
+            },
+            {
+              "validate": "required,min=10,max=250",
+              "field": "password",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "url": "/user/details",
+          "method": "GET",
+          "response_type": "default",
+          "controller_name": "GetUserDetailsWithAuth",
+          "url_params": [],
+          "body": []
+        }
+      ]
+    },
+    {
+      "name": "Transaction",
+      "endpoints": [
+        {
+          "url": "/transaction",
+          "method": "GET",
+          "response_type": "default",
+          "controller_name": "GetTransactionsForUser",
+          "url_params": [],
+          "body": []
+        },
+        {
+          "url": "/transaction",
+          "method": "POST",
+          "response_type": "default",
+          "controller_name": "CreateTransaction",
+          "url_params": [],
+          "body": [
+            {
+              "validate": "required,uuid4",
+              "field": "sender_id",
+              "type": "string"
+            },
+            {
+              "validate": "required,uuid4",
+              "field": "reciever_id",
+              "type": "string"
+            },
+            {
+              "validate": "required",
+              "field": "amount",
+              "type": "int32"
+            }
+          ]
+        },
+        {
+          "url": "/transaction",
+          "method": "GET",
+          "response_type": "default",
+          "controller_name": "GetTransactionByID",
+          "url_params": [
+            {
+              "field": "transaction_id",
+              "type": "string"
+            }
+          ],
+          "body": []
+        }
+      ]
+    },
+    {
+      "name": "Balance",
+      "endpoints": [
+        {
+          "url": "/balance",
+          "method": "GET",
+          "response_type": "default",
+          "controller_name": "GetBalance",
+          "url_params": [
+            {
+              "field": "id",
+              "type": "string"
+            }
+          ],
+          "body": []
+        },
+        {
+          "url": "/balance",
+          "method": "POST",
+          "response_type": "default",
+          "controller_name": "CreateBalance",
+          "url_params": [],
+          "body": []
+        },
+        {
+          "url": "/balance",
+          "method": "DELETE",
+          "response_type": "default",
+          "controller_name": "DeleteBalance",
+          "url_params": [
+            {
+              "field": "id",
+              "type": "string"
+            }
+          ],
+          "body": []
+        },
+        {
+          "url": "/balance",
+          "method": "PUT",
+          "response_type": "default",
+          "controller_name": "UpdateBalance",
+          "url_params": [
+            {
+              "field": "id",
+              "type": "string"
+            }
+          ],
+          "body": []
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "endpoints": [
+        {
+          "url": "/auth/token",
+          "method": "POST",
+          "response_type": "default",
+          "controller_name": "TokenIsValid",
+          "url_params": [],
+          "body": [
+            {
+              "validate": "required",
+              "field": "access_token",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

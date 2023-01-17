@@ -1,0 +1,5 @@
+tmp/
+#.env
+.DS_Store
+controllers.gen.go
+*.gen.txt

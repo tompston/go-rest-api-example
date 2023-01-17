@@ -1,0 +1,153 @@
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  /* make the scrollbar not take up the total 
+  space of the page,  so that there is no shift 
+  once it appears / dissapears */
+  overflow-y: scroll;
+  cursor: default;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  touch-action: manipulation;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-family: var(--global-font);
+  background: var(--global-bg-col);
+  color: var(--global-txt-col);
+}
+
+::selection {
+  color: var(--selection-txt-col);
+  background-color: var(--selection-bg-col);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: unset;
+}
+
+ul,
+ol {
+  margin: 0px;
+  padding-left: 33px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+p,
+pre {
+  margin: 0;
+}
+
+button {
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  padding: 0;
+}
+
+button:disabled,
+button[disabled] {
+  opacity: 0.3;
+}
+
+code,
+.code {
+  border-radius: var(--code-border-rad);
+  font-family: var(--font-mono);
+  padding: var(--code-padding);
+  background: var(--code-bg);
+  font-size: var(--code-fs);
+  color: var(--code-txt);
+}
+
+.code {
+  max-width: 100%;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+input,
+textarea {
+  padding: 0;
+  margin: 0;
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* removes the border on focus for inputs */
+input:focus,
+textarea:focus {
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  opacity: 1;
+  font-size: var(--placeholder-fs);
+  color: var(--placeholder-txt);
+}
+
+a,
+a:hover,
+a:focus,
+a:active {
+  color: inherit;
+}
+
+/* disable text select utility class + applied to buttons, images and inputs */
+.disable-text-select,
+button,
+img,
+input::placeholder,
+textarea::placeholder {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  user-select: none;
+}
+
+ol li {
+  margin-left: 20px;
+  list-style: decimal;
+}
+
+/* Link tag colors */
+a {
+  font-weight: var(--link-fw);
+  color: var(--link-txt);
+}
+
+a:hover {
+  color: var(--link-txt-hover);
+  text-decoration: underline;
+}
+
+a:active{
+  color: var(--link-txt-active);
+}
+
+a:visited{
+  color: var(--link-txt-visited);
+}
