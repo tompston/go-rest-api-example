@@ -7,6 +7,7 @@ https://user-images.githubusercontent.com/82293948/213023194-1b2dcc06-863b-4dfc-
   - JWT for authentication
   - Cursor Pagination for Users and Transactions endpoints (using `uuids` and `created_at` values)
   - SQLC for getting the data, dbmate for managing migrations.
+  - If you want to preview the backend endpoints, just copy `gomarvin.json` content in the [editor](https://gomarvin.pages.dev/) (Settings -> Import Tab)
 - Frontend
   - Vue 3 + Vite + Tailwind.
   - Home view is guarded by authentication check. If the user has an invalid token, that route is not accessible.
