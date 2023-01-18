@@ -24,7 +24,7 @@ https://user-images.githubusercontent.com/82293948/213242777-3673ded0-8fef-4c8e-
 
 ### DISCLAIMER
 
-A lot of parts are rough around the edges. A lot of the parts can be improved to avoid code duplication.
+A lot of parts are rough around the edges and can be improved to avoid code duplication.
 
 - JWT Auth flow in the frontend is lacking
   - `access_token` expiration is 15mins, no flow for re-authentication
