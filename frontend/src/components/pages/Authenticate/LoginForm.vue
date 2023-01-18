@@ -2,9 +2,10 @@
 import { ref } from 'vue'
 import { placeholderUser } from "../../../../../backend/public/placeholder"
 import * as F from "../../../../../backend/public/gomarvin.gen"
-import { StorageKey, Auth } from "../../../assets/ts"
+import { StorageKey, Auth, FieldValidationError } from "../../../assets/ts"
 import { useRouter } from 'vue-router';
 import InputComponent from '../../global/InputComponent.vue';
+import ApiValidationFailedErrors from '../../global/ApiValidationFailedErrors.vue';
 
 // router variable
 const router = useRouter()
@@ -15,7 +16,7 @@ const password = ref<string>(placeholderUser.password)
 const isFetching = ref<boolean>(false)
 const apiResponseFailed = ref<boolean>(false)
 const error_message = ref<string>("")
-const failedValidationFields = ref<[]>([])
+const failedValidationFields = ref<FieldValidationError[]>([])
 
 /** Full flow for loggingg in a user */
 async function PostUserLoginDetails() {
@@ -36,8 +37,9 @@ async function PostUserLoginDetails() {
         router.push({ path: '/' })
     }
     else {
-        // if (data.data )
-
+        if (data.message === "Payload validation failed!") {
+            failedValidationFields.value = data.data
+        }
         isFetching.value = false
         error_message.value = data.message
         apiResponseFailed.value = true
@@ -62,5 +64,8 @@ async function PostUserLoginDetails() {
         <div v-if="apiResponseFailed" class="mt-5">
             <div class="bg-red-700 text-white p-3 flex-center fw-600 border-rad-3">{{ error_message }}</div>
         </div>
+
+        <ApiValidationFailedErrors :errors="failedValidationFields" />
+
     </div>
 </template>

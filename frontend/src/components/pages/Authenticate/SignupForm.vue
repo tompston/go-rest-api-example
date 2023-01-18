@@ -60,7 +60,7 @@ async function PostUserLoginDetails() {
                     inputId="email-login" :inputValue="email" @update="(email = $event)" />
                 <InputComponent labelClass="input__1-label" inputClass="input__1" labelName="USERNAME" inputType="text"
                     inputId="username-login" :inputValue="username" @update="(username = $event)" />
-                <InputComponent labelClass="input__1-label" inputClass="input__1" labelName="PASSWORD" inputType="text"
+                <InputComponent labelClass="input__1-label" inputClass="input__1" labelName="PASSWORD" inputType="password"
                     inputId="password-login" :inputValue="password" @update="(password = $event)" />
                 <div><button class="button__1" @click="PostUserLoginDetails()">SIGN UP</button></div>
             </div>
@@ -68,5 +68,4 @@ async function PostUserLoginDetails() {
 
         <ApiValidationFailedErrors :errors="failedValidationFields" />
     </div>
-
 </template>

@@ -5,6 +5,7 @@ import { clientWithAuth } from "../assets/ts/client"
 import { useRouter } from 'vue-router';
 import { Ref, onMounted, ref } from 'vue';
 import * as F from "../../../backend/public/gomarvin.gen"
+import TransactionsTable from '../components/pages/Home/TransactionsTable.vue';
 
 /** User API Client with auth headers */
 const client = clientWithAuth(GetAuthToken())
@@ -58,18 +59,8 @@ onMounted(() => {
             </div>
         </div>
 
-        <div class="grid">
-            <div class="grid grid-cols-3 fw-700 fs-10 bg-gray-200 p-2">
-                <div>SENT TO</div>
-                <div>AMOUNT</div>
-                <div>DATE</div>
-            </div>
-            <div v-for="transaction in API_transasctions" v-bind:key="transaction"
-                class="grid grid-cols-3 font-mono fs-9 border-b py-2 bg-gray-50">
-                <div>{{ transaction.username }}</div>
-                <div>{{ transaction.amount }}</div>
-                <div>{{ new Date(transaction.created_at).toLocaleDateString('en-us') }}</div>
-            </div>
-        </div>
+
+        <TransactionsTable :transactions="API_transasctions"/>
+
     </MainLayout>
 </template>
