@@ -3,9 +3,11 @@ import Container from '../global/Container.vue';
 import { useRouter } from 'vue-router';
 import { Auth, StorageKey } from "../../assets/ts"
 
+const router = useRouter()
+
 function Logout(): void {
     StorageKey.Delete(Auth.ACCESS_TOKEN_KEY())
-    useRouter().push({ path: '/auth' })
+    router.push({ path: '/auth' })
 }
 
 </script>

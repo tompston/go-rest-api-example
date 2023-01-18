@@ -29,6 +29,7 @@ async function PostUserLoginDetails() {
 
     const data = await res.json()
 
+    /** If everything goes ok */
     if (data.status === 200) {
         isFetching.value = false
         StorageKey.Set(Auth.ACCESS_TOKEN_KEY(), data.data.token.access_token)

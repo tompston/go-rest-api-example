@@ -4,6 +4,7 @@ import { placeholderUser } from "../../../../../backend/public/placeholder"
 import * as F from "../../../../../backend/public/gomarvin.gen"
 import { StorageKey, Auth } from "../../../assets/ts"
 import { useRouter } from 'vue-router';
+import InputComponent from '../../global/InputComponent.vue';
 
 // router variable
 const router = useRouter()
@@ -35,15 +36,15 @@ async function PostUserLoginDetails() {
      * If response is not ok
      *      return error message
      */
-    if (res.status === 200) {
+    const data = await res.json()
+
+    if (data.status === 200) {
         isFetching.value = false
-        const data = await res.json()
         StorageKey.Set(Auth.ACCESS_TOKEN_KEY(), data.data.token.access_token)
         router.push({ path: '/' })
     } else {
         isFetching.value = false
         apiResponseFailed.value = true
-        // error_message.value = 
     }
 }
 
@@ -54,16 +55,10 @@ async function PostUserLoginDetails() {
         <h4 class="fw-700">Log In</h4>
         <form @submit.prevent>
             <div class="grid gap-3">
-                <div>
-                    <label for="username" class="input__1-label">USERNAME</label>
-                    <input required type="text" class="input__1" placeholder="username" id="username"
-                        v-model="username">
-                </div>
-                <div>
-                    <label for="password" class="input__1-label">PASSWORD</label>
-                    <input required type="password" class="input__1" placeholder="password" id="password"
-                        v-model="password">
-                </div>
+                <InputComponent labelClass="input__1-label" inputClass="input__1" labelName="USERNAME" inputType="text"
+                    inputId="username" :inputValue="username" @update="(username = $event)" />
+                <InputComponent labelClass="input__1-label" inputClass="input__1" labelName="PASSWORD" inputType="text"
+                    inputId="password" :inputValue="password" @update="(password = $event)" />
                 <div><button class="button__1" @click="PostUserLoginDetails()">LOG IN</button></div>
             </div>
         </form>
