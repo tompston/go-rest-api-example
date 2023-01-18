@@ -19,7 +19,7 @@ const error_message = ref<string>("")
 /** Full flow for loggingg in a user */
 async function PostUserLoginDetails() {
     isFetching.value = true
-    error_message.value = ""
+    apiResponseFailed.value = false
 
     const res = await F.UserEndpoints.LoginUser(
         F.defaultClient, {
@@ -27,15 +27,6 @@ async function PostUserLoginDetails() {
         password: password.value
     })
 
-    /** 
-     * If the response is ok:
-     *      Save the returned access token in localstorage 
-     *      and move to the default homepage which needs 
-     *      a correct authentication token to return
-     *      the date from an authenticated API endpoint
-     * If response is not ok
-     *      return error message
-     */
     const data = await res.json()
 
     if (data.status === 200) {
@@ -44,6 +35,7 @@ async function PostUserLoginDetails() {
         router.push({ path: '/' })
     } else {
         isFetching.value = false
+        error_message.value = data.message
         apiResponseFailed.value = true
     }
 }
@@ -62,5 +54,9 @@ async function PostUserLoginDetails() {
                 <div><button class="button__1" @click="PostUserLoginDetails()">LOG IN</button></div>
             </div>
         </form>
+
+        <div v-if="apiResponseFailed" class="mt-5">
+            <div class="bg-red-700 text-white p-3 flex-center fw-600 border-rad-3">{{ error_message }}</div>
+        </div>
     </div>
 </template>

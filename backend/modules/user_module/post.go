@@ -91,6 +91,12 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	data, err := sqlc.New(database.DB).User_LoginWithUsername(
 		context.Background(), payload.Username)
 
+	// If no user is returned
+	if (data == sqlc.User{}) {
+		res.Response(w, 400, nil, "User Not Found!")
+		return
+	}
+
 	if err != nil {
 		res.Response(w, 400, nil, res.DbErrorMessage(err.Error()))
 		return
@@ -108,7 +114,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	if err := bcrypt.CompareHashAndPassword(
 		[]byte(data.Password),
 		[]byte(payload.Password)); err != nil {
-		res.Response(w, 401, nil, "Incorrect password provided!")
+		res.Response(w, 401, nil, "Incorrect password provided for the User!")
 		return
 	}
 
