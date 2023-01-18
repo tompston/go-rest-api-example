@@ -47,7 +47,30 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res.Response(w, 201, data, "New User created!")
+	token_claims := auth.TokenClaims{
+		IsAdmin:  data.IsAdmin,
+		Username: data.Username,
+		UserID:   data.UserID.String()}
+
+	access_token, err := auth.CreateJwtAccesToken(token_claims)
+	if err != nil || access_token == "" {
+		res.Response(w, 400, nil, "Could not create a valid JWT Access Token!")
+		return
+	}
+
+	refresh_token, err := auth.CreateJwtRefreshToken(token_claims)
+	if err != nil || refresh_token == "" {
+		res.Response(w, 400, nil, "Could not create a valid JWT Refresh Token!")
+		return
+	}
+
+	data_with_token := &res.ResponseWithJwt{
+		Data: data,
+		JwtFields: res.JwtFields{
+			AccessToken:  access_token,
+			RefreshToken: refresh_token}}
+
+	res.Response(w, 200, data_with_token, "User Created and Logged in!")
 }
 
 // Return access and refresh JWT tokens in the response, if
@@ -111,9 +134,6 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		JwtFields: res.JwtFields{
 			AccessToken:  access_token,
 			RefreshToken: refresh_token}}
-
-	// fmt.Println(access_token)
-	// fmt.Println(refresh_token)
 
 	res.Response(w, 200, data_with_token, "User Logged in!")
 }

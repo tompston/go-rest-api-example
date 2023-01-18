@@ -42,6 +42,13 @@ func GetTransactionsForUser(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 
+		// If no transactions for the user are found, return nil data,
+		// and an appropriate message.
+		if data == nil {
+			res.Response(w, 200, nil, "No transactions for user found!")
+			return
+		}
+
 		next_cursor := paginate.EncodeCursor(
 			data[limit].CreatedAt,
 			data[limit].UserID.String())

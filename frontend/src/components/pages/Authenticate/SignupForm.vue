@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { placeholderUser } from "../../../../../backend/public/placeholder"
-import * as F from "../../../../../backend/public/gomarvin.gen"
 import { StorageKey, Auth } from "../../../assets/ts"
 import { useRouter } from 'vue-router';
+import * as F from "../../../../../backend/public/gomarvin.gen"
 
 // router variable
 const router = useRouter()
 // Form input
-const username = ref<string>(placeholderUser.username)
-const password = ref<string>(placeholderUser.password)
+const username = ref<string>("")
+const password = ref<string>("")
+const email = ref<string>("")
 // State Variables
 const isFetching = ref<boolean>(false)
 const apiResponseFailed = ref<boolean>(false)
@@ -19,11 +19,13 @@ const error_message = ref<string>("")
 async function PostUserLoginDetails() {
     isFetching.value = true
     error_message.value = ""
+    // error_message.value = ""
 
-    const res = await F.UserEndpoints.LoginUser(
+    const res = await F.UserEndpoints.RegisterUser(
         F.defaultClient, {
         username: username.value,
-        password: password.value
+        password: password.value,
+        email: email.value
     })
 
     /** 
@@ -51,17 +53,27 @@ async function PostUserLoginDetails() {
 
 <template>
     <div>
-        <h4 class="fw-700">Log In</h4>
+        <h4 class="fw-700">Sign Up</h4>
         <form @submit.prevent>
+
             <div class="grid gap-3">
+
+                <!-- Email -->
                 <div>
-                    <label for="username" class="input__1-label">USERNAME</label>
-                    <input required type="text" class="input__1" placeholder="username" id="username"
+                    <label for="email-login" class="input__1-label">EMAIL</label>
+                    <input required type="text" class="input__1" placeholder="username" id="email-login"
+                        v-model="email">
+                </div>
+                <!-- Username -->
+                <div>
+                    <label for="username-login" class="input__1-label">USERNAME</label>
+                    <input required type="text" class="input__1" placeholder="username" id="username-login"
                         v-model="username">
                 </div>
+                <!-- Password -->
                 <div>
-                    <label for="password" class="input__1-label">PASSWORD</label>
-                    <input required type="password" class="input__1" placeholder="password" id="password"
+                    <label for="password-login" class="input__1-label">PASSWORD</label>
+                    <input required type="password" class="input__1" placeholder="password" id="password-login"
                         v-model="password">
                 </div>
                 <div><button class="button__1" @click="PostUserLoginDetails()">LOG IN</button></div>
