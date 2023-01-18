@@ -7,13 +7,9 @@ import { ref } from 'vue'
 
 <template></template>
 
-<style>
-</style>
-
 
 // center content
 <div class="flex-center">
     <div class="max-width-1">content</div>
 </div>
-
 ```
