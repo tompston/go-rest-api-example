@@ -15,6 +15,7 @@ const password = ref<string>(placeholderUser.password)
 const isFetching = ref<boolean>(false)
 const apiResponseFailed = ref<boolean>(false)
 const error_message = ref<string>("")
+const failedValidationFields = ref<[]>([])
 
 /** Full flow for loggingg in a user */
 async function PostUserLoginDetails() {
@@ -33,7 +34,10 @@ async function PostUserLoginDetails() {
         isFetching.value = false
         StorageKey.Set(Auth.ACCESS_TOKEN_KEY(), data.data.token.access_token)
         router.push({ path: '/' })
-    } else {
+    }
+    else {
+        // if (data.data )
+
         isFetching.value = false
         error_message.value = data.message
         apiResponseFailed.value = true

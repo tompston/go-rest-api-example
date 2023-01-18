@@ -35,7 +35,7 @@ func Router(api *chi.Mux) {
 	// Use rate limiting on registration route to prevent bot spamming
 	// Example -> https://go-chi.io/#/pages/middleware?id=http-rate-limiting-middleware
 	api.Group(func(r chi.Router) {
-		r.Use(httprate.LimitByIP(5, 10*time.Minute))
+		r.Use(httprate.LimitByIP(100, 100*time.Minute))
 		r.Post(RegisterUserUrl, RegisterUser)
 	})
 }

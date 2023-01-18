@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { StorageKey, Auth } from "../../../assets/ts"
+import { StorageKey, Auth, errorMessageForFieldName, FieldValidationError } from "../../../assets/ts"
 import { useRouter } from 'vue-router';
 import * as F from "../../../../../backend/public/gomarvin.gen"
 import InputComponent from '../../global/InputComponent.vue';
+import ApiValidationFailedErrors from '../../global/ApiValidationFailedErrors.vue';
 
 // router variable
 const router = useRouter()
@@ -14,11 +15,13 @@ const email = ref<string>("")
 // State Variables
 const isFetching = ref<boolean>(false)
 const apiResponseFailed = ref<boolean>(false)
-const failedValidationFields = ref<[]>([])
+const error_message = ref<string>("")
+const failedValidationFields = ref<FieldValidationError[]>([])
 
 /** Full flow for loggingg in a user */
 async function PostUserLoginDetails() {
     isFetching.value = true
+    apiResponseFailed.value = false
 
     const res = await F.UserEndpoints.RegisterUser(
         F.defaultClient, {
@@ -35,14 +38,12 @@ async function PostUserLoginDetails() {
         StorageKey.Set(Auth.ACCESS_TOKEN_KEY(), data.data.token.access_token)
         router.push({ path: '/' })
     }
-    /** If payload validation fails  */
-    else if (data.status === 400) {
-        failedValidationFields.value = data.data
-        isFetching.value = false
-    }
-    /** If the response fails completely */
     else {
+        if (data.message === "Payload validation failed!") {
+            failedValidationFields.value = data.data
+        }
         isFetching.value = false
+        error_message.value = data.message
         apiResponseFailed.value = true
     }
 }
@@ -64,5 +65,8 @@ async function PostUserLoginDetails() {
                 <div><button class="button__1" @click="PostUserLoginDetails()">SIGN UP</button></div>
             </div>
         </form>
+
+        <ApiValidationFailedErrors :errors="failedValidationFields" />
     </div>
+
 </template>
