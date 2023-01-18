@@ -1,15 +1,22 @@
 ## Full-Stack app for creating transactions
 
-https://user-images.githubusercontent.com/82293948/213023194-1b2dcc06-863b-4dfc-ad4b-f743eaaba685.mp4
+
+https://user-images.githubusercontent.com/82293948/213242777-3673ded0-8fef-4c8e-b79f-3be12416f893.mp4
+
 
 - Backend
   - Golang, Chi Framework 
   - JWT for authentication
+  - Rate limiting for registration endpoint
+  - Payload validation using validate package
   - Cursor Pagination for Users and Transactions endpoints (using `uuids` and `created_at` values)
   - SQLC for getting the data, dbmate for managing migrations.
   - If you want to preview the backend endpoints, just copy `gomarvin.json` content in the [editor](https://gomarvin.pages.dev/) (Settings -> Import Tab)
 - Frontend
   - Vue 3 + Vite + Tailwind.
+  - Registration and Login views
+    - Field validation errors are returned from the database
+    - Custom Login error messages if the user does not exist or the password is incorrect
   - Home view is guarded by authentication check. If the user has an invalid token, that route is not accessible.
 - Other
   - Deno and Faker used for seeding the database (using the generated gomarvin client
@@ -17,14 +24,14 @@ https://user-images.githubusercontent.com/82293948/213023194-1b2dcc06-863b-4dfc-
 
 ### DISCLAIMER
 
-A lot of parts are rough around the edges.
+A lot of parts are rough around the edges. A lot of the parts can be improved to avoid code duplication.
 
 - JWT Auth flow in the frontend is lacking
   - `access_token` expiration is 15mins, no flow for re-authentication
 - DB tables can be improved
 - There are endpoints which don't execute any queries.
 - Frontend is as minimal as possible
-  - No loading/error states
+  - No loading states while fetching the data
 
 ### Setup
 
