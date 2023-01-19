@@ -186,8 +186,7 @@ func GetUserDetailsWithAuth(w http.ResponseWriter, r *http.Request) {
 				CreatedAt:       data.CreatedAt,
 				Username:        data.Username,
 				Balance:         balance,
-				TimeUntillBonus: utils.TimeUntillNextDay(bonus_payment.CreatedAt),
-			}, "")
+				TimeUntillBonus: utils.SecondsUntillNextDay(bonus_payment.CreatedAt)}, "")
 		return
 	}
 
@@ -197,6 +196,5 @@ func GetUserDetailsWithAuth(w http.ResponseWriter, r *http.Request) {
 			CreatedAt:       data.CreatedAt,
 			Username:        data.Username,
 			Balance:         balance,
-			TimeUntillBonus: utils.SecondsUntillNextDay(last_bonus_from_transaction_bot.CreatedAt),
-		}, "")
+			TimeUntillBonus: utils.SecondsUntillNextDay(last_bonus_from_transaction_bot.CreatedAt)}, "")
 }
