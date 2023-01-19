@@ -42,6 +42,19 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: balances; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.balances (
+    balance_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    user_id uuid NOT NULL,
+    balance integer NOT NULL
+);
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -77,6 +90,14 @@ CREATE TABLE public.users (
     email character varying(300) NOT NULL,
     password character varying(700) NOT NULL
 );
+
+
+--
+-- Name: balances balances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.balances
+    ADD CONSTRAINT balances_pkey PRIMARY KEY (balance_id);
 
 
 --
@@ -120,6 +141,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: balances set_timestamp; Type: TRIGGER; Schema: public; Owner: -
+--
+
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.balances FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
 -- Name: transactions set_timestamp; Type: TRIGGER; Schema: public; Owner: -
 --
 
@@ -131,6 +159,14 @@ CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.transactions FOR EACH ROW E
 --
 
 CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: balances balances_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.balances
+    ADD CONSTRAINT balances_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE;
 
 
 --
@@ -161,4 +197,5 @@ ALTER TABLE ONLY public.transactions
 INSERT INTO public.schema_migrations (version) VALUES
     ('20230101184700'),
     ('20230116143036'),
-    ('20230117124309');
+    ('20230117124309'),
+    ('20230119152024');

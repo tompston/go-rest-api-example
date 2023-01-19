@@ -1,0 +1,56 @@
+
+WITH trans_sum AS (
+    SELECT 
+        sender_id AS user_id, 
+        SUM(CASE WHEN sender_id = 'cc720122-04df-47c3-98ab-854bdedb9f8c' THEN -amount ELSE amount END) AS trans_sum
+    FROM transactions
+    GROUP BY sender_id
+    
+)
+
+
+WITH trans_sum AS (
+    SELECT 
+        sender_id AS user_id, 
+        SUM(CASE WHEN sender_id = 'cc720122-04df-47c3-98ab-854bdedb9f8c' THEN -amount ELSE amount END) AS trans_sum
+    FROM transactions
+    GROUP BY sender_id
+) SELECT COUNT(*) FROM transactions;
+
+
+
+SELECT      COUNT(*)
+FROM        transactions;
+
+
+SELECT SUM(R.amount), SUM(S.amount) FROM
+(SELECT SUM(amount) from transactions WHERE receiver_id= 'cc720122-04df-47c3-98ab-854bdedb9f8c') AS R
+
+(SELECT SUM(amount) from transactions WHERE sender?id= 'cc720122-04df-47c3-98ab-854bdedb9f8c') AS S;
+
+SELECT SUM(R.amount), SUM(S.amount) FROM
+(SELECT SUM(amount) from transactions WHERE receiver_id= 'cc720122-04df-47c3-98ab-854bdedb9f8c')  R
+(SELECT SUM(amount) from transactions WHERE sender_id= 'cc720122-04df-47c3-98ab-854bdedb9f8c')  S;
+
+
+
+WITH receieved_payments AS (
+  SELECT      SUM(t.amount)
+  FROM        transactions t
+  WHERE       t.receiver_id = 'cc720122-04df-47c3-98ab-854bdedb9f8c'
+), sent_payments AS (
+  SELECT      SUM(t.amount)
+  FROM        transactions t
+  WHERE       t.sender_id = 'cc720122-04df-47c3-98ab-854bdedb9f8c'
+) SELECT receieved_payments - sent_payments;
+
+
+
+
+
+WITH sent_transactions_sum AS (
+  SELECT      SUM(t.amount)
+  FROM        transactions t
+  WHERE       t.sender_id = 'cc720122-04df-47c3-98ab-854bdedb9f8c';
+)
+

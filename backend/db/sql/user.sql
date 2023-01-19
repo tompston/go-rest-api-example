@@ -121,7 +121,7 @@ RETURNING   *;
 -- name: User_GetSentTransactionsWhereUserIdEqualsFirstPage :many
 SELECT      
     users.user_id, users.username,
-    transactions.transaction_id, transactions.amount
+    transactions.transaction_id, transactions.amount, transactions.created_at
 FROM
     users
     INNER JOIN  transactions

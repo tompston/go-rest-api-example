@@ -8,7 +8,9 @@ import (
 	res "backend/lib/response"
 	"backend/settings/database"
 	"context"
+	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/google/uuid"
@@ -130,7 +132,8 @@ func GetUserDetailsWithAuth(w http.ResponseWriter, r *http.Request) {
 	auth_header := request.GetAuthHeader(r)
 	auth_claim, err := auth.GetTokenClaims(auth_header)
 	if err != nil {
-		res.Response(w, 401, nil, "Authentication Failed!")
+		res.Response(w, 401, nil, "Authentication Failed! Invalid token claim extraction.")
+		return
 	}
 
 	user_id := uuid.MustParse(auth_claim["user_id"].(string))
@@ -141,5 +144,28 @@ func GetUserDetailsWithAuth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res.Response(w, 200, data, "")
+	// If no transactions are found for the user, the returned balance is 0
+	balance, err := sqlc.New(database.DB).Balance_GetUserBalanceByUserID(context.Background(), user_id)
+	fmt.Println("CURRENT BALANCE :: ", balance)
+
+	if err != nil {
+		fmt.Println("Error occured during calculating the balance of the user, because no transactions could be found, user_id :: ", user_id)
+	}
+
+	// Combine user data and balance into a single struct
+	type Response struct {
+		UserID    uuid.UUID `json:"user_id"`
+		CreatedAt time.Time `json:"created_at"`
+		Username  string    `json:"username"`
+		Balance   int64     `json:"balance"`
+	}
+
+	full_data := Response{
+		UserID:    data.UserID,
+		CreatedAt: data.CreatedAt,
+		Username:  data.Username,
+		Balance:   balance,
+	}
+
+	res.Response(w, 200, full_data, "")
 }

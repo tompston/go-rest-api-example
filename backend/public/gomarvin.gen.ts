@@ -74,10 +74,7 @@ export const TransactionEndpoints = {
     
 /** Endpoints for the Balance module */
 export const BalanceEndpoints = {
-  GetBalance,
-  CreateBalance,
-  DeleteBalance,
-  UpdateBalance,
+  GetBalanceForUserWithAuth,
 }
     
 /** Endpoints for the Auth module */
@@ -338,83 +335,20 @@ export async function GetTransactionByID(client : Client,transaction_id: string,
     
 
 /**
- * ### GET URL/balance/[id:string]
- * Fetch GetBalance endpoint and return the promise of the response
- * @param {Client} client init settings for the api client (url and headers)
- * @param {string} id url param for the endpoint 
-
- * @param {OptionalParams} [opt] optional params you can add to the request ( appended_url and custom options )
- * @returns {Promise<Response>} Promise of the fetch request
- */
-export async function GetBalance(client : Client,id: string,  opt?: OptionalParams): Promise<Response> {
-  const appended_url = opt?.append_url ? opt?.append_url : "";
-  const url = `${client.host_url}${client.api_prefix}/balance/${id}${appended_url}`;
-  if (opt?.options) {
-    return await fetch(url, opt?.options);
-  }
-  return await fetch(url, {
-    method: "GET",
-    headers: client.headers,
-    });
-}
-
-/**
- * ### POST URL/balance
- * Fetch CreateBalance endpoint and return the promise of the response
+ * ### GET URL/balance
+ * Fetch GetBalanceForUserWithAuth endpoint and return the promise of the response
  * @param {Client} client init settings for the api client (url and headers)
  * @param {OptionalParams} [opt] optional params you can add to the request ( appended_url and custom options )
  * @returns {Promise<Response>} Promise of the fetch request
  */
-export async function CreateBalance(client : Client, opt?: OptionalParams): Promise<Response> {
+export async function GetBalanceForUserWithAuth(client : Client, opt?: OptionalParams): Promise<Response> {
   const appended_url = opt?.append_url ? opt?.append_url : "";
   const url = `${client.host_url}${client.api_prefix}/balance${appended_url}`;
   if (opt?.options) {
     return await fetch(url, opt?.options);
   }
   return await fetch(url, {
-    method: "POST",
-    headers: client.headers,
-    });
-}
-
-/**
- * ### DELETE URL/balance/[id:string]
- * Fetch DeleteBalance endpoint and return the promise of the response
- * @param {Client} client init settings for the api client (url and headers)
- * @param {string} id url param for the endpoint 
-
- * @param {OptionalParams} [opt] optional params you can add to the request ( appended_url and custom options )
- * @returns {Promise<Response>} Promise of the fetch request
- */
-export async function DeleteBalance(client : Client,id: string,  opt?: OptionalParams): Promise<Response> {
-  const appended_url = opt?.append_url ? opt?.append_url : "";
-  const url = `${client.host_url}${client.api_prefix}/balance/${id}${appended_url}`;
-  if (opt?.options) {
-    return await fetch(url, opt?.options);
-  }
-  return await fetch(url, {
-    method: "DELETE",
-    headers: client.headers,
-    });
-}
-
-/**
- * ### PUT URL/balance/[id:string]
- * Fetch UpdateBalance endpoint and return the promise of the response
- * @param {Client} client init settings for the api client (url and headers)
- * @param {string} id url param for the endpoint 
-
- * @param {OptionalParams} [opt] optional params you can add to the request ( appended_url and custom options )
- * @returns {Promise<Response>} Promise of the fetch request
- */
-export async function UpdateBalance(client : Client,id: string,  opt?: OptionalParams): Promise<Response> {
-  const appended_url = opt?.append_url ? opt?.append_url : "";
-  const url = `${client.host_url}${client.api_prefix}/balance/${id}${appended_url}`;
-  if (opt?.options) {
-    return await fetch(url, opt?.options);
-  }
-  return await fetch(url, {
-    method: "PUT",
+    method: "GET",
     headers: client.headers,
     });
 }

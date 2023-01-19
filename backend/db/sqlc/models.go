@@ -10,6 +10,14 @@ import (
 	"github.com/google/uuid"
 )
 
+type Balance struct {
+	BalanceID uuid.UUID `json:"balance_id"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserID    uuid.UUID `json:"user_id"`
+	Balance   int32     `json:"balance"`
+}
+
 type Transaction struct {
 	TransactionID uuid.UUID `json:"transaction_id"`
 	CreatedAt     time.Time `json:"created_at"`

@@ -7,7 +7,7 @@
     "api_prefix": "/api/v1",
     "config_version": 0.1,
     "db_type": "postgres",
-    "include_sql": false,
+    "include_sql": true,
     "include_fetch": true,
     "gomarvin_version": "v0.6.x"
   },
@@ -167,47 +167,8 @@
           "url": "/balance",
           "method": "GET",
           "response_type": "default",
-          "controller_name": "GetBalance",
-          "url_params": [
-            {
-              "field": "id",
-              "type": "string"
-            }
-          ],
-          "body": []
-        },
-        {
-          "url": "/balance",
-          "method": "POST",
-          "response_type": "default",
-          "controller_name": "CreateBalance",
+          "controller_name": "GetBalanceForUserWithAuth",
           "url_params": [],
-          "body": []
-        },
-        {
-          "url": "/balance",
-          "method": "DELETE",
-          "response_type": "default",
-          "controller_name": "DeleteBalance",
-          "url_params": [
-            {
-              "field": "id",
-              "type": "string"
-            }
-          ],
-          "body": []
-        },
-        {
-          "url": "/balance",
-          "method": "PUT",
-          "response_type": "default",
-          "controller_name": "UpdateBalance",
-          "url_params": [
-            {
-              "field": "id",
-              "type": "string"
-            }
-          ],
           "body": []
         }
       ]
@@ -230,6 +191,10 @@
           ]
         }
       ]
+    },
+    {
+      "name": "DailyBonus",
+      "endpoints": []
     }
   ]
 }

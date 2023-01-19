@@ -271,8 +271,8 @@ func (q *Queries) User_GetAllWithPaginationNextPage(ctx context.Context, arg Use
 
 const user_GetSentTransactionsWhereUserIdEquals = `-- name: User_GetSentTransactionsWhereUserIdEquals :many
 SELECT      
-    users.user_id, users.created_at, users.username,
-    transactions.transaction_id, transactions.amount
+    users.user_id, users.username,
+    transactions.transaction_id, transactions.amount, transactions.created_at
 FROM
     users
     INNER JOIN  transactions
@@ -292,10 +292,10 @@ type User_GetSentTransactionsWhereUserIdEqualsParams struct {
 
 type User_GetSentTransactionsWhereUserIdEqualsRow struct {
 	UserID        uuid.UUID `json:"user_id"`
-	CreatedAt     time.Time `json:"created_at"`
 	Username      string    `json:"username"`
 	TransactionID uuid.UUID `json:"transaction_id"`
 	Amount        int32     `json:"amount"`
+	CreatedAt     time.Time `json:"created_at"`
 }
 
 func (q *Queries) User_GetSentTransactionsWhereUserIdEquals(ctx context.Context, arg User_GetSentTransactionsWhereUserIdEqualsParams) ([]User_GetSentTransactionsWhereUserIdEqualsRow, error) {
@@ -309,10 +309,10 @@ func (q *Queries) User_GetSentTransactionsWhereUserIdEquals(ctx context.Context,
 		var i User_GetSentTransactionsWhereUserIdEqualsRow
 		if err := rows.Scan(
 			&i.UserID,
-			&i.CreatedAt,
 			&i.Username,
 			&i.TransactionID,
 			&i.Amount,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
@@ -329,8 +329,8 @@ func (q *Queries) User_GetSentTransactionsWhereUserIdEquals(ctx context.Context,
 
 const user_GetSentTransactionsWhereUserIdEqualsFirstPage = `-- name: User_GetSentTransactionsWhereUserIdEqualsFirstPage :many
 SELECT      
-    users.user_id, users.created_at, users.username,
-    transactions.transaction_id, transactions.amount
+    users.user_id, users.username,
+    transactions.transaction_id, transactions.amount, transactions.created_at
 FROM
     users
     INNER JOIN  transactions
@@ -346,10 +346,10 @@ type User_GetSentTransactionsWhereUserIdEqualsFirstPageParams struct {
 
 type User_GetSentTransactionsWhereUserIdEqualsFirstPageRow struct {
 	UserID        uuid.UUID `json:"user_id"`
-	CreatedAt     time.Time `json:"created_at"`
 	Username      string    `json:"username"`
 	TransactionID uuid.UUID `json:"transaction_id"`
 	Amount        int32     `json:"amount"`
+	CreatedAt     time.Time `json:"created_at"`
 }
 
 func (q *Queries) User_GetSentTransactionsWhereUserIdEqualsFirstPage(ctx context.Context, arg User_GetSentTransactionsWhereUserIdEqualsFirstPageParams) ([]User_GetSentTransactionsWhereUserIdEqualsFirstPageRow, error) {
@@ -363,10 +363,10 @@ func (q *Queries) User_GetSentTransactionsWhereUserIdEqualsFirstPage(ctx context
 		var i User_GetSentTransactionsWhereUserIdEqualsFirstPageRow
 		if err := rows.Scan(
 			&i.UserID,
-			&i.CreatedAt,
 			&i.Username,
 			&i.TransactionID,
 			&i.Amount,
+			&i.CreatedAt,
 		); err != nil {
 			return nil, err
 		}
