@@ -6,6 +6,7 @@ import { useRouter } from 'vue-router';
 import { Ref, onMounted, ref } from 'vue';
 import * as F from "../../../backend/public/gomarvin.gen"
 import TransactionsTable from '../components/pages/Home/TransactionsTable.vue';
+import UserDetails from '../components/pages/Home/UserDetails.vue';
 
 /** User API Client with auth headers */
 const client = clientWithAuth(GetAuthToken())
@@ -40,6 +41,11 @@ async function FetchUserDetails() {
     }
 }
 
+function secondsToMinutes(s: number) {
+    let min = s / 60
+    return min.toFixed(2)
+}
+
 onMounted(() => {
     FetchUserTransactions()
     FetchUserDetails()
@@ -49,18 +55,7 @@ onMounted(() => {
 
 <template>
     <MainLayout>
-
-        <div class="p-5 bg-black text-white mb-4 fw-700">
-            <h3 class="">{{ API_user.username }}</h3>
-            <div>Created on {{ new Date(API_user.created_at).toDateString() }}</div>
-            <div class="flex gap-2">
-                <div>ID for user </div>
-                <div class="font-mono opacity-60">{{ API_user.user_id }}</div>
-            </div>
-        </div>
-
-
-        <TransactionsTable :transactions="API_transasctions"/>
-
+        <UserDetails :API_user="API_user" />
+        <TransactionsTable :transactions="API_transasctions" />
     </MainLayout>
 </template>

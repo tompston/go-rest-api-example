@@ -6,6 +6,7 @@ import (
 	"backend/lib/paginate"
 	"backend/lib/request"
 	res "backend/lib/response"
+	"backend/lib/utils"
 	"backend/settings/database"
 	"context"
 	"fmt"
@@ -137,8 +138,8 @@ func GetUserDetailsWithAuth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user_id := uuid.MustParse(auth_claim["user_id"].(string))
-	ctx := context.Background()
 	db := sqlc.New(database.DB)
+	ctx := context.Background()
 
 	data, err := db.User_GetWhereIdEquals(ctx, user_id)
 	if err != nil {
@@ -149,23 +150,53 @@ func GetUserDetailsWithAuth(w http.ResponseWriter, r *http.Request) {
 	// If no transactions are found for the user, the returned balance is 0
 	balance, err := db.Balance_GetUserBalanceByUserID(ctx, user_id)
 	if err != nil {
-		fmt.Println("Error occured during calculating the balance of the user, because no transactions could be found, user_id :: ", user_id)
+		fmt.Println("Error occured during calculating the balance ", res.DbErrorMessage(err.Error()))
 	}
 
-	// Combine user data and balance into a single struct
-	type Response struct {
-		UserID    uuid.UUID `json:"user_id"`
-		CreatedAt time.Time `json:"created_at"`
-		Username  string    `json:"username"`
-		Balance   int64     `json:"balance"`
+	// Find the last transaction that was sent from the BonusBot
+	last_bonus_from_transaction_bot, err := db.
+		Transaction_FindLastTransactionBotBonusPaymentForUser(ctx, data.UserID)
+
+	// If a user registered before the BonusBot was implemented, no transactions
+	// between the users will be found, so Create the initial payment, so that
+	// next sql queries would find a row between the bot and the user.
+	if (last_bonus_from_transaction_bot ==
+		sqlc.Transaction_FindLastTransactionBotBonusPaymentForUserRow{}) {
+		bonus_payment, err := db.Transaction_TransactionBotSendsBonusToUser(ctx, data.UserID)
+		if err != nil {
+			fmt.Println("Could not send the bonus transaction to user with the id of ", bonus_payment.ReceiverID)
+		}
 	}
 
-	full_data := Response{
-		UserID:    data.UserID,
-		CreatedAt: data.CreatedAt,
-		Username:  data.Username,
-		Balance:   balance,
+	if err != nil {
+		fmt.Println(res.DbErrorMessage(err.Error()))
 	}
 
-	res.Response(w, 200, full_data, "")
+	last_bonus_exceeds_one_day := utils.DifferenceIsLogerThanOneDay(
+		time.Now(), last_bonus_from_transaction_bot.CreatedAt)
+
+	if last_bonus_exceeds_one_day {
+		bonus_payment, err := db.Transaction_TransactionBotSendsBonusToUser(ctx, data.UserID)
+		if err != nil {
+			fmt.Println("Could not send the bonus transaction to user with the id of ", bonus_payment.ReceiverID)
+		}
+		res.Response(w, 200,
+			GetUserDetailsWithAuthResponse{
+				UserID:          data.UserID,
+				CreatedAt:       data.CreatedAt,
+				Username:        data.Username,
+				Balance:         balance,
+				TimeUntillBonus: utils.TimeUntillNextDay(bonus_payment.CreatedAt),
+			}, "")
+		return
+	}
+
+	res.Response(w, 200,
+		GetUserDetailsWithAuthResponse{
+			UserID:          data.UserID,
+			CreatedAt:       data.CreatedAt,
+			Username:        data.Username,
+			Balance:         balance,
+			TimeUntillBonus: utils.SecondsUntillNextDay(last_bonus_from_transaction_bot.CreatedAt),
+		}, "")
 }

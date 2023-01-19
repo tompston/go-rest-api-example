@@ -73,7 +73,7 @@ func (q *Queries) Transaction_DeleteWhereIdEquals(ctx context.Context, transacti
 const transaction_FindLastTransactionBotBonusPaymentForUser = `-- name: Transaction_FindLastTransactionBotBonusPaymentForUser :one
 SELECT      created_at, sender_id, receiver_id, amount
 FROM        transactions
-WHERE       sender_id = '899a61bf-d4e4-48d1-9274-467c50166252'
+WHERE       sender_id = '899a61bf-d4e4-48d1-9274-467c50166252' AND receiver_id = $1
 ORDER BY    created_at DESC
 LIMIT 1
 `
@@ -85,8 +85,8 @@ type Transaction_FindLastTransactionBotBonusPaymentForUserRow struct {
 	Amount     int32     `json:"amount"`
 }
 
-func (q *Queries) Transaction_FindLastTransactionBotBonusPaymentForUser(ctx context.Context) (Transaction_FindLastTransactionBotBonusPaymentForUserRow, error) {
-	row := q.db.QueryRowContext(ctx, transaction_FindLastTransactionBotBonusPaymentForUser)
+func (q *Queries) Transaction_FindLastTransactionBotBonusPaymentForUser(ctx context.Context, receiverID uuid.UUID) (Transaction_FindLastTransactionBotBonusPaymentForUserRow, error) {
+	row := q.db.QueryRowContext(ctx, transaction_FindLastTransactionBotBonusPaymentForUser, receiverID)
 	var i Transaction_FindLastTransactionBotBonusPaymentForUserRow
 	err := row.Scan(
 		&i.CreatedAt,

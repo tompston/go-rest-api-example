@@ -94,6 +94,6 @@ RETURNING *;
 -- name: Transaction_FindLastTransactionBotBonusPaymentForUser :one
 SELECT      created_at, sender_id, receiver_id, amount
 FROM        transactions
-WHERE       sender_id = '899a61bf-d4e4-48d1-9274-467c50166252'
+WHERE       sender_id = '899a61bf-d4e4-48d1-9274-467c50166252' AND receiver_id = $1
 ORDER BY    created_at DESC
 LIMIT 1;
