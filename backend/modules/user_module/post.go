@@ -8,6 +8,7 @@ import (
 	"backend/settings/database"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"golang.org/x/crypto/bcrypt"
@@ -65,10 +66,15 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data_with_token := &res.ResponseWithJwt{
-		Data: data,
-		JwtFields: res.JwtFields{
-			AccessToken:  access_token,
-			RefreshToken: refresh_token}}
+		Data:      data,
+		JwtFields: res.JwtFields{AccessToken: access_token, RefreshToken: refresh_token}}
+
+	// Upon registration, send a transaction from the transaction bot to the newly created user
+	bonus_payment, err := sqlc.New(database.DB).
+		Transaction_TransactionBotSendsBonusToUser(context.Background(), data.UserID)
+	if err != nil {
+		fmt.Println("Could not send the bonus transaction to user with the id of ", bonus_payment.ReceiverID)
+	}
 
 	res.Response(w, 200, data_with_token, "User Created and Logged in!")
 }
@@ -88,9 +94,7 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	data, err := sqlc.New(database.DB).User_LoginWithUsername(
-		context.Background(), payload.Username)
-
+	data, err := sqlc.New(database.DB).User_LoginWithUsername(context.Background(), payload.Username)
 	// If no user is returned
 	if (data == sqlc.User{}) {
 		res.Response(w, 400, nil, "User Not Found!")
@@ -136,10 +140,8 @@ func LoginUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data_with_token := &res.ResponseWithJwt{
-		Data: data,
-		JwtFields: res.JwtFields{
-			AccessToken:  access_token,
-			RefreshToken: refresh_token}}
+		Data:      data,
+		JwtFields: res.JwtFields{AccessToken: access_token, RefreshToken: refresh_token}}
 
 	res.Response(w, 200, data_with_token, "User Logged in!")
 }
