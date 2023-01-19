@@ -1,8 +1,6 @@
 ## Full-Stack app for creating transactions
 
-
-https://user-images.githubusercontent.com/82293948/213242777-3673ded0-8fef-4c8e-b79f-3be12416f893.mp4
-
+https://user-images.githubusercontent.com/82293948/213549059-0cdc7ddc-fabe-4d7f-92c3-1844c08ccbb5.mp4
 
 - Backend
   - Golang, Chi Framework 
