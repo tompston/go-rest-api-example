@@ -137,17 +137,17 @@ func GetUserDetailsWithAuth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	user_id := uuid.MustParse(auth_claim["user_id"].(string))
+	ctx := context.Background()
+	db := sqlc.New(database.DB)
 
-	data, err := sqlc.New(database.DB).User_GetWhereIdEquals(context.Background(), user_id)
+	data, err := db.User_GetWhereIdEquals(ctx, user_id)
 	if err != nil {
 		res.Response(w, 400, nil, res.DbErrorMessage(err.Error()))
 		return
 	}
 
 	// If no transactions are found for the user, the returned balance is 0
-	balance, err := sqlc.New(database.DB).Balance_GetUserBalanceByUserID(context.Background(), user_id)
-	fmt.Println("CURRENT BALANCE :: ", balance)
-
+	balance, err := db.Balance_GetUserBalanceByUserID(ctx, user_id)
 	if err != nil {
 		fmt.Println("Error occured during calculating the balance of the user, because no transactions could be found, user_id :: ", user_id)
 	}
