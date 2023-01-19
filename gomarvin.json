@@ -7,7 +7,7 @@
     "api_prefix": "/api/v1",
     "config_version": 0.1,
     "db_type": "postgres",
-    "include_sql": true,
+    "include_sql": false,
     "include_fetch": true,
     "gomarvin_version": "v0.6.x"
   },
@@ -161,19 +161,6 @@
       ]
     },
     {
-      "name": "Balance",
-      "endpoints": [
-        {
-          "url": "/balance",
-          "method": "GET",
-          "response_type": "default",
-          "controller_name": "GetBalanceForUserWithAuth",
-          "url_params": [],
-          "body": []
-        }
-      ]
-    },
-    {
       "name": "Auth",
       "endpoints": [
         {
@@ -191,10 +178,6 @@
           ]
         }
       ]
-    },
-    {
-      "name": "DailyBonus",
-      "endpoints": []
     }
   ]
 }

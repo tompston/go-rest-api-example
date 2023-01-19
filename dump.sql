@@ -51,6 +51,21 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
+-- Name: balances; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.balances (
+    balance_id uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
+    user_id uuid NOT NULL,
+    balance integer NOT NULL
+);
+
+
+ALTER TABLE public.balances OWNER TO postgres;
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: postgres
 --
 
@@ -95,6 +110,14 @@ CREATE TABLE public.users (
 ALTER TABLE public.users OWNER TO postgres;
 
 --
+-- Data for Name: balances; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.balances (balance_id, created_at, updated_at, user_id, balance) FROM stdin;
+\.
+
+
+--
 -- Data for Name: schema_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
@@ -102,6 +125,7 @@ COPY public.schema_migrations (version) FROM stdin;
 20230101184700
 20230116143036
 20230117124309
+20230119152024
 \.
 
 
@@ -160,6 +184,12 @@ b8a636f5-976c-44cc-baaf-8e3fea16ea1d	2023-01-17 15:32:15.464656	2023-01-17 15:32
 2550c4bb-f74d-4e96-8961-533244d2f151	2023-01-17 15:32:15.465241	2023-01-17 15:32:15.465241	cc720122-04df-47c3-98ab-854bdedb9f8c	2d74b17c-2041-49fd-861b-72cd1bc7a903	1
 9ecc7170-9840-4a8b-b0b0-d8da2a64d938	2023-01-17 15:32:15.466283	2023-01-17 15:32:15.466283	2d74b17c-2041-49fd-861b-72cd1bc7a903	cc720122-04df-47c3-98ab-854bdedb9f8c	90
 2d222e24-896f-44b1-bfab-694c1ccec98e	2023-01-17 15:32:15.466742	2023-01-17 15:32:15.466742	cc720122-04df-47c3-98ab-854bdedb9f8c	2d74b17c-2041-49fd-861b-72cd1bc7a903	82
+33a8e659-9624-44b2-ba3b-99f364e31c9d	2023-01-19 20:13:01.785431	2023-01-19 20:13:01.785431	899a61bf-d4e4-48d1-9274-467c50166252	cc720122-04df-47c3-98ab-854bdedb9f8c	1000
+ba9318f8-ea36-4f0d-baef-612554b4ddf5	2023-01-19 20:29:31.698071	2023-01-19 20:29:31.698071	899a61bf-d4e4-48d1-9274-467c50166252	3f345f07-7fad-4d43-ae9a-704b83083a97	1000
+b31a455c-9027-4c07-8a22-f7570df99f8c	2023-01-19 20:55:04.790256	2023-01-19 20:55:04.790256	899a61bf-d4e4-48d1-9274-467c50166252	f9a2f480-e8dd-4b28-b28f-c223d1e9ee59	1000
+e8c77195-3ac4-4a31-b86d-c686f184b36f	2023-01-19 21:36:56.948262	2023-01-19 21:36:56.948262	899a61bf-d4e4-48d1-9274-467c50166252	a3a6f495-a9f3-4b00-aa5b-8980d6132a7f	1000
+ef283bc2-260a-4803-ad19-a04744080b81	2023-01-19 21:46:40.658193	2023-01-19 21:46:40.658193	899a61bf-d4e4-48d1-9274-467c50166252	15cd8c1b-2b31-4b89-92d5-819f38ca14c5	1000
+7010ac3f-bd46-42df-854e-e9407ea7d9a7	2023-01-19 21:55:22.024603	2023-01-19 21:55:22.024603	899a61bf-d4e4-48d1-9274-467c50166252	c59ed5fe-a2fe-44ec-a96e-fd673265ffa9	1000
 651a91fe-5149-4e84-928c-5d5ec7d3c22e	2023-01-17 15:32:15.41496	2023-01-17 15:32:15.41496	cc720122-04df-47c3-98ab-854bdedb9f8c	2d74b17c-2041-49fd-861b-72cd1bc7a903	26
 e24f945a-9bcb-4f6c-96fe-e0b2d4f443ed	2023-01-17 15:32:15.422147	2023-01-17 15:32:15.422147	2d74b17c-2041-49fd-861b-72cd1bc7a903	cc720122-04df-47c3-98ab-854bdedb9f8c	83
 173b793c-dada-49f5-82bf-d28363eadb6b	2023-01-17 15:32:15.423674	2023-01-17 15:32:15.423674	cc720122-04df-47c3-98ab-854bdedb9f8c	2d74b17c-2041-49fd-861b-72cd1bc7a903	54
@@ -327,7 +357,24 @@ a8b1702a-8fd5-4a95-b686-b80cc811f7a5	2023-01-18 16:05:15.50825	2023-01-18 16:05:
 e794e455-266b-4533-b56c-d186a999c577	2023-01-18 16:58:10.014381	2023-01-18 16:58:10.014381	f	alalalalal@asd.com	alalalalal@asd.com	$2a$10$gqeSF/9O9Y8GTfOj3McsV.DeLWizZOOYUY5UA/zLmEnhecUwx4i5W
 d5869c50-89c3-4787-8eee-4fb2d7a896d2	2023-01-18 18:21:26.786973	2023-01-18 18:21:26.786973	f	lasdasdkasdkasd@asd.com	lasdasdkasdkasd@asd.com	$2a$10$XEvn.lmwB363sAF9p57NCepqixwQFtBfaoTwhc/8XcR5xt3qTcL6S
 148a261c-13de-4c3a-84e2-a3bb7ad828c7	2023-01-18 18:28:46.55164	2023-01-18 18:28:46.55164	f	qqqqqquuu@qqqqq.com	qqqqqquuu@qqqqq.com	$2a$10$JjenxcILv./hBL5ILXs1SOmZd0XgsTrv60cXBqXg9QP/fC/dhW1fe
+662a64f2-dfa6-4400-927d-4d05514b082d	2023-01-18 18:40:56.885406	2023-01-18 18:40:56.885406	f	qweqqweqweqw@asdasd.com	qweqqweqweqw@asdasd.com	$2a$10$oHrBwohBWTfr3XzvQSlCoetUwcQGDIOl.iTqeUHNr./yYKYNo6lG.
+aa7c4b6b-d0cf-4ac1-8a73-e7eaec9e3d1d	2023-01-19 18:43:04.302399	2023-01-19 18:43:04.302399	f	qpqpqpqpq@qpqpqpq.com	qpqpqpqpq@qpqpqpq.com	$2a$10$0BVXOVkRDTuztQzjEL0jMeAUjNofuUCQeWrMS1rb/Jf2//zggCoUK
+899a61bf-d4e4-48d1-9274-467c50166252	2023-01-19 19:02:19.519663	2023-01-19 19:02:19.519663	f	user-bonus-bot	user-bonus-bot@bot.com	$2a$10$EUQszFLOcmHwjmDvD2uAsupP4f5LYvulBay0hk/aBxMrs21mDZVIK
+3f345f07-7fad-4d43-ae9a-704b83083a97	2023-01-19 20:29:31.69169	2023-01-19 20:29:31.69169	f	vrvrvrvrvrvrvr@asdasd.com	vrvrvrvrvrvrvr@asdasd.com	$2a$10$T6XmPjP.Oq/KA6oWIXluQu/vdbIXjZr.oMEkOgtIrw3gZb5q.q2jW
+f9a2f480-e8dd-4b28-b28f-c223d1e9ee59	2023-01-19 20:55:04.784907	2023-01-19 20:55:04.784907	f	apapapapapa@apa.com	apapapapapa@apa.com	$2a$10$P8gdupLX2mOGN/Xh0c9PXusVL3vIR.kphVEeySKHzhsnFfbxZENT2
+d5636dae-3911-434c-9ba1-3702d8c6c26c	2023-01-19 21:03:26.240079	2023-01-19 21:03:26.240079	f	QWEQWASDASD	ASDASD@ASDASD.COM	SLSLSLSSLSSLS
+a3a6f495-a9f3-4b00-aa5b-8980d6132a7f	2023-01-19 21:36:56.941112	2023-01-19 21:36:56.941112	f	eueueueuee@qwe.com	eueueueuee@qwe.com	$2a$10$V4MHOS6Sq0mJ2IMvY52XmOfHoYfMOLS2BkrSwGqAT2synQbbkwzqq
+15cd8c1b-2b31-4b89-92d5-819f38ca14c5	2023-01-19 21:46:40.651331	2023-01-19 21:46:40.651331	f	djdjdjdjd@asd.com	djdjdjdjd@asd.com	$2a$10$0cAtRgE790lxUhKCVb869eiHPp3aSF.AQSy3mati4w//3Q99o883e
+c59ed5fe-a2fe-44ec-a96e-fd673265ffa9	2023-01-19 21:55:22.019583	2023-01-19 21:55:22.019583	f	asdlasdlc@asd.com	asdlasdlc@asd.com	$2a$10$rIjAdpzumxfkIUnTQL496Oq2u75Fu8LNrpCuThMd0P2wFcBNVDrs.
 \.
+
+
+--
+-- Name: balances balances_pkey; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.balances
+    ADD CONSTRAINT balances_pkey PRIMARY KEY (balance_id);
 
 
 --
@@ -371,6 +418,13 @@ ALTER TABLE ONLY public.users
 
 
 --
+-- Name: balances set_timestamp; Type: TRIGGER; Schema: public; Owner: postgres
+--
+
+CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.balances FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
 -- Name: transactions set_timestamp; Type: TRIGGER; Schema: public; Owner: tompston
 --
 
@@ -382,6 +436,14 @@ CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.transactions FOR EACH ROW E
 --
 
 CREATE TRIGGER set_timestamp BEFORE UPDATE ON public.users FOR EACH ROW EXECUTE FUNCTION public.trigger_set_timestamp();
+
+
+--
+-- Name: balances balances_user_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.balances
+    ADD CONSTRAINT balances_user_id_fkey FOREIGN KEY (user_id) REFERENCES public.users(user_id) ON DELETE CASCADE;
 
 
 --
