@@ -143,4 +143,3 @@ WHERE
     ( transactions.created_at =  @created_at::TIMESTAMP AND users.user_id < @user_id::uuid ))
 ORDER BY    transactions.created_at DESC
 LIMIT       @_limit::int;
-

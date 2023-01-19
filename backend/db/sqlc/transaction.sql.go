@@ -70,6 +70,32 @@ func (q *Queries) Transaction_DeleteWhereIdEquals(ctx context.Context, transacti
 	return i, err
 }
 
+const transaction_FindLastTransactionBotBonusPaymentForUser = `-- name: Transaction_FindLastTransactionBotBonusPaymentForUser :one
+SELECT      created_at, sender_id, receiver_id, amount
+FROM        transactions
+WHERE       sender_id = '899a61bf-d4e4-48d1-9274-467c50166252'
+LIMIT 1
+`
+
+type Transaction_FindLastTransactionBotBonusPaymentForUserRow struct {
+	CreatedAt  time.Time `json:"created_at"`
+	SenderID   uuid.UUID `json:"sender_id"`
+	ReceiverID uuid.UUID `json:"receiver_id"`
+	Amount     int32     `json:"amount"`
+}
+
+func (q *Queries) Transaction_FindLastTransactionBotBonusPaymentForUser(ctx context.Context) (Transaction_FindLastTransactionBotBonusPaymentForUserRow, error) {
+	row := q.db.QueryRowContext(ctx, transaction_FindLastTransactionBotBonusPaymentForUser)
+	var i Transaction_FindLastTransactionBotBonusPaymentForUserRow
+	err := row.Scan(
+		&i.CreatedAt,
+		&i.SenderID,
+		&i.ReceiverID,
+		&i.Amount,
+	)
+	return i, err
+}
+
 const transaction_GetAll = `-- name: Transaction_GetAll :many
 SELECT      transaction_id, created_at, sender_id, receiver_id
 FROM        transactions
@@ -293,12 +319,8 @@ func (q *Queries) Transaction_GetAllWithPaginationFirstPage(ctx context.Context,
 const transaction_GetAllWithPaginationNextPage = `-- name: Transaction_GetAllWithPaginationNextPage :many
 SELECT      transaction_id, created_at,  sender_id, receiver_id
 FROM        transactions
-WHERE
-    (
-      created_at <= $1::TIMESTAMP
-      OR 
-      ( created_at = $1::TIMESTAMP AND transaction_id < $2::uuid )
-    )
+WHERE       ( created_at <= $1::TIMESTAMP  OR 
+            ( created_at = $1::TIMESTAMP   AND transaction_id < $2::uuid ) )
 ORDER BY    created_at DESC
 LIMIT       $3::int
 `
@@ -365,6 +387,26 @@ func (q *Queries) Transaction_GetWhereIdEquals(ctx context.Context, transactionI
 	err := row.Scan(
 		&i.TransactionID,
 		&i.CreatedAt,
+		&i.SenderID,
+		&i.ReceiverID,
+		&i.Amount,
+	)
+	return i, err
+}
+
+const transaction_TransactionBotSendsBonusToUser = `-- name: Transaction_TransactionBotSendsBonusToUser :one
+INSERT INTO TRANSACTIONS ( sender_id, receiver_id, amount )
+VALUES ( '899a61bf-d4e4-48d1-9274-467c50166252', $1, 1000 )
+RETURNING transaction_id, created_at, updated_at, sender_id, receiver_id, amount
+`
+
+func (q *Queries) Transaction_TransactionBotSendsBonusToUser(ctx context.Context, receiverID uuid.UUID) (Transaction, error) {
+	row := q.db.QueryRowContext(ctx, transaction_TransactionBotSendsBonusToUser, receiverID)
+	var i Transaction
+	err := row.Scan(
+		&i.TransactionID,
+		&i.CreatedAt,
+		&i.UpdatedAt,
 		&i.SenderID,
 		&i.ReceiverID,
 		&i.Amount,

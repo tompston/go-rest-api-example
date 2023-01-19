@@ -39,12 +39,8 @@ LIMIT       $1;
 -- name: Transaction_GetAllWithPaginationNextPage :many
 SELECT      transaction_id, created_at,  sender_id, receiver_id
 FROM        transactions
-WHERE
-    (
-      created_at <= @created_at::TIMESTAMP
-      OR 
-      ( created_at = @created_at::TIMESTAMP AND transaction_id < @transaction_id::uuid )
-    )
+WHERE       ( created_at <= @created_at::TIMESTAMP  OR 
+            ( created_at = @created_at::TIMESTAMP   AND transaction_id < @transaction_id::uuid ) )
 ORDER BY    created_at DESC
 LIMIT       @_limit::int;
 
@@ -87,3 +83,16 @@ RETURNING   *;
 DELETE FROM transactions
 WHERE       transaction_id = $1
 RETURNING   *;
+
+
+-- name: Transaction_TransactionBotSendsBonusToUser :one
+INSERT INTO TRANSACTIONS ( sender_id, receiver_id, amount )
+VALUES ( '899a61bf-d4e4-48d1-9274-467c50166252', $1, 1000 )
+RETURNING *;
+
+
+-- name: Transaction_FindLastTransactionBotBonusPaymentForUser :one
+SELECT      created_at, sender_id, receiver_id, amount
+FROM        transactions
+WHERE       sender_id = '899a61bf-d4e4-48d1-9274-467c50166252'
+LIMIT 1;
